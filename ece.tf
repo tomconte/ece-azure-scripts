@@ -113,7 +113,7 @@ resource "azurerm_virtual_machine" "test" {
   location              = "${azurerm_resource_group.ece.location}"
   resource_group_name   = "${azurerm_resource_group.ece.name}"
   network_interface_ids = ["${element(azurerm_network_interface.ece.*.id, count.index)}"]
-  vm_size               = "Standard_DS2_v2"
+  vm_size               = "Standard_DS11_v2"
 
   storage_image_reference {
     id = "/subscriptions/252281c3-8a06-4af8-8f3f-d6af13e4fde3/resourceGroups/ece-base-image/providers/Microsoft.Compute/images/ece-base-image"
