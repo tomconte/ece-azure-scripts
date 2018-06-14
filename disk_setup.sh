@@ -9,7 +9,6 @@ mkdir -p /data
 echo -e '/dev/sdc1\t/data\txfs\tdefaults,nofail,x-systemd.automount,prjquota,pquota\t0 2' >> /etc/fstab
 systemctl daemon-reload
 systemctl restart local-fs.target
-chown elastic:elastic /data
 
 # Reconfigure Docker,
 # point it to the new data directory
@@ -30,3 +29,6 @@ EOF
 systemctl daemon-reload
 systemctl restart docker
 systemctl enable docker
+
+# Ensure elastic user owns the data directory
+chown elastic:elastic /data
