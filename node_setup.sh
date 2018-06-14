@@ -53,25 +53,6 @@ root             hard    nofile         1024000
 root             soft    memlock        unlimited
 EOF
 
-# Configure Docker options
-
-mkdir -p /etc/systemd/system/docker.service.d
-
-cat > /etc/systemd/system/docker.service.d/docker.conf <<EOF
-[Unit]
-Description=Docker Service
-After=multi-user.target
-
-[Service]
-Environment="DOCKER_OPTS=-H unix:///run/docker.sock -g /data/docker --storage-driver=aufs --bip=172.17.42.1/16 --raw-logs"
-ExecStart=
-ExecStart=/usr/bin/docker daemon \$DOCKER_OPTS
-EOF
-
-systemctl daemon-reload
-systemctl restart docker
-systemctl enable docker
-
 # Network settings
 
 cat > /etc/sysctl.d/70-cloudenterprise.conf <<SETTINGS
