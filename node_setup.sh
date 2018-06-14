@@ -27,17 +27,6 @@ adduser --disabled-password --gecos "" elastic
 
 usermod -aG docker elastic
 
-# Partition, format and mount disk (XFS)
-# Assuming the data disk is mounted on /dev/sdc
-
-echo -e "n\np\n1\n\n\nw" | fdisk /dev/sdc
-mkfs.xfs /dev/sdc1
-mkdir -p /data
-echo -e '/dev/sdc1\t/data\txfs\tdefaults,nofail,x-systemd.automount,prjquota,pquota\t0 2' >> /etc/fstab
-systemctl daemon-reload
-systemctl restart local-fs.target
-chown elastic:elastic /data
-
 # Update GRUB configuration to enable cgroups memory accounting
 
 sed -i '/^GRUB_CMDLINE_LINUX_DEFAULT/ {s/="/="cgroup_enable=memory swapaccount=1 cgroup.memory=nokmem /}' /etc/default/grub.d/50-cloudimg-settings.cfg

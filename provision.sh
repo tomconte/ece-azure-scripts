@@ -51,8 +51,11 @@ do
         --data-disk-sizes-gb ${disk_size} --public-ip-address-allocation static --vnet-name vnet-ece \
         --subnet default --nsg nsg-ece --admin-user azureuser
 
-    # Run setup script
+    # Run node setup script
     az vm run-command invoke -g ${resource_group_name} -n $i --command-id RunShellScript --scripts @node_setup.sh
+
+    # Run disk setup script
+    az vm run-command invoke -g ${resource_group_name} -n $i --command-id RunShellScript --scripts @disk_setup.sh
 
     # Reboot
     az vm restart -g ${resource_group_name} -n $i
