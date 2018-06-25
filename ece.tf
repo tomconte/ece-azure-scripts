@@ -2,7 +2,7 @@ provider "azurerm" {}
 
 resource "azurerm_resource_group" "ece" {
   name     = "ece"
-  location = "West Europe"
+  location = "Central US"
 }
 
 resource "azurerm_network_security_group" "ece" {
@@ -91,6 +91,7 @@ resource "azurerm_public_ip" "ece" {
   location                     = "${azurerm_resource_group.ece.location}"
   resource_group_name          = "${azurerm_resource_group.ece.name}"
   public_ip_address_allocation = "static"
+  sku                          = "Standard"
 }
 
 resource "azurerm_network_interface" "ece" {
@@ -114,6 +115,7 @@ resource "azurerm_virtual_machine" "test" {
   resource_group_name   = "${azurerm_resource_group.ece.name}"
   network_interface_ids = ["${element(azurerm_network_interface.ece.*.id, count.index)}"]
   vm_size               = "Standard_DS11_v2"
+  zones                 = ["${count.index+1}"]
 
   storage_image_reference {
     id = "/subscriptions/252281c3-8a06-4af8-8f3f-d6af13e4fde3/resourceGroups/ece-base-image/providers/Microsoft.Compute/images/ece-base-image"
