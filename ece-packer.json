@@ -19,7 +19,7 @@
     "managed_image_resource_group_name": "ece-base-image",
     "managed_image_name": "ece-base-image",
 
-    "location": "West Europe",
+    "location": "Central US",
     "vm_size": "Standard_DS2_v2"
   }],
   "provisioners": [{
