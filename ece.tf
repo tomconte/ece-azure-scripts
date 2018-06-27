@@ -73,18 +73,6 @@ resource "azurerm_subnet" "ece" {
   address_prefix       = "10.0.0.0/24"
 }
 
-variable "node_count" {
-  default = 3
-}
-
-variable "ADMIN_USER" {
-  default = "azureuser"
-}
-
-variable "ADMIN_PASSWORD" {
-  default = "Password1234!"
-}
-
 resource "azurerm_public_ip" "ece" {
   count                        = "${var.node_count}"
   name                         = "public-ip-${format("%02d", count.index+1)}"
@@ -114,11 +102,11 @@ resource "azurerm_virtual_machine" "test" {
   location              = "${azurerm_resource_group.ece.location}"
   resource_group_name   = "${azurerm_resource_group.ece.name}"
   network_interface_ids = ["${element(azurerm_network_interface.ece.*.id, count.index)}"]
-  vm_size               = "Standard_DS11_v2"
+  vm_size               = "${var.vm_size}"
   zones                 = ["${count.index+1}"]
 
   storage_image_reference {
-    id = "/subscriptions/252281c3-8a06-4af8-8f3f-d6af13e4fde3/resourceGroups/ece-base-image/providers/Microsoft.Compute/images/ece-base-image"
+    id = "${var.image_id}"
   }
 
   storage_os_disk {
@@ -133,7 +121,7 @@ resource "azurerm_virtual_machine" "test" {
     managed_disk_type = "Premium_LRS"
     create_option     = "Empty"
     lun               = 0
-    disk_size_gb      = "512"
+    disk_size_gb      = "${var.disk_size}"
   }
 
   os_profile {
@@ -151,6 +139,7 @@ resource "azurerm_virtual_machine" "test" {
     host     = "${element(azurerm_public_ip.ece.*.ip_address, count.index)}"
     user     = "${var.ADMIN_USER}"
     password = "${var.ADMIN_PASSWORD}"
+    timeout  = "10m"
   }
 
   provisioner "file" {
