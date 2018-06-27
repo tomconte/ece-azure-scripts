@@ -50,9 +50,9 @@ The ID will have this form:
 Copy the image ID into the `image_id` variables in `veriables.tf`. It should look like this:
 
 ```
-  storage_image_reference {
-    id = "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/ece-base-image/providers/Microsoft.Compute/images/ece-base-image"
-  }
+variable "image_id" {
+  default = "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/ece-base-image/providers/Microsoft.Compute/images/ece-base-image"
+}
 ```
 
 You can also edit other variables, like the VM size and the data disk size (in GB).
